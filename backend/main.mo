@@ -13,6 +13,7 @@ actor {
   type Category = {
     id: Nat;
     name: Text;
+    icon: Text;
   };
 
   type Topic = {
@@ -59,10 +60,11 @@ actor {
   };
 
   // Public functions
-  public shared(msg) func createCategory(name: Text): async Result.Result<Nat, Text> {
+  public shared(msg) func createCategory(name: Text, icon: Text): async Result.Result<Nat, Text> {
     let category: Category = {
       id = nextCategoryId;
       name = name;
+      icon = icon;
     };
     categories := Array.append(categories, [category]);
     nextCategoryId += 1;
@@ -127,12 +129,12 @@ actor {
   system func preupgrade() {
     if (Array.size(categories) == 0) {
       let defaultCategories = [
-        { id = 1; name = "Web Security" },
-        { id = 2; name = "Network Penetration" },
-        { id = 3; name = "Cryptography" },
-        { id = 4; name = "Reverse Engineering" },
-        { id = 5; name = "Malware Analysis" },
-        { id = 6; name = "Social Engineering" },
+        { id = 1; name = "Web Security"; icon = "language" },
+        { id = 2; name = "Network Penetration"; icon = "wifi" },
+        { id = 3; name = "Cryptography"; icon = "lock" },
+        { id = 4; name = "Reverse Engineering"; icon = "build" },
+        { id = 5; name = "Malware Analysis"; icon = "bug_report" },
+        { id = 6; name = "Social Engineering"; icon = "people" },
       ];
       categories := defaultCategories;
       nextCategoryId := 7;

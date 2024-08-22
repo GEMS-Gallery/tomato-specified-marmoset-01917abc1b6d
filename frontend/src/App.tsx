@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, useParams, useNavigate } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Container, Paper, List, ListItem, ListItemText, TextField, Button, CircularProgress } from '@mui/material';
+import { AppBar, Toolbar, Typography, Container, Paper, List, ListItem, ListItemText, TextField, Button, CircularProgress, Grid, Card, CardContent, Icon } from '@mui/material';
 import { styled } from '@mui/system';
 import { AuthClient } from '@dfinity/auth-client';
 import { Principal } from '@dfinity/principal';
@@ -9,11 +9,12 @@ import { backend } from 'declarations/backend';
 const ConsoleInput = styled(TextField)(({ theme }) => ({
   '& .MuiInputBase-input': {
     color: '#00FF00',
-    fontFamily: 'Courier, monospace',
+    fontFamily: '"Roboto Mono", "Courier New", monospace',
   },
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
       borderColor: '#00FF00',
+      borderRadius: 0,
     },
     '&:hover fieldset': {
       borderColor: '#00FF00',
@@ -27,6 +28,7 @@ const ConsoleInput = styled(TextField)(({ theme }) => ({
 const ConsoleButton = styled(Button)(({ theme }) => ({
   color: '#00FF00',
   borderColor: '#00FF00',
+  borderRadius: 0,
   '&:hover': {
     backgroundColor: 'rgba(0, 255, 0, 0.1)',
   },
@@ -35,6 +37,7 @@ const ConsoleButton = styled(Button)(({ theme }) => ({
 interface Category {
   id: bigint;
   name: string;
+  icon: string;
 }
 
 interface Topic {
@@ -85,9 +88,9 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <AppBar position="static">
+      <AppBar position="static" color="transparent" elevation={0}>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontFamily: '"Roboto Mono", "Courier New", monospace' }}>
             Hacker Forum
           </Typography>
           {isAuthenticated ? (
@@ -132,18 +135,20 @@ const CategoryList: React.FC = () => {
   }
 
   return (
-    <Paper sx={{ mt: 2, p: 2 }}>
-      <Typography variant="h4" gutterBottom>
-        Categories
-      </Typography>
-      <List>
-        {categories.map((category) => (
-          <ListItem key={Number(category.id)} component={Link} to={`/category/${category.id}`}>
-            <ListItemText primary={category.name} />
-          </ListItem>
-        ))}
-      </List>
-    </Paper>
+    <Grid container spacing={3} sx={{ mt: 2 }}>
+      {categories.map((category) => (
+        <Grid item xs={12} sm={6} md={4} key={Number(category.id)}>
+          <Card component={Link} to={`/category/${category.id}`} sx={{ textDecoration: 'none', height: '100%' }}>
+            <CardContent>
+              <Icon sx={{ fontSize: 40, mb: 2 }}>{category.icon}</Icon>
+              <Typography variant="h5" component="div">
+                {category.name}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      ))}
+    </Grid>
   );
 };
 

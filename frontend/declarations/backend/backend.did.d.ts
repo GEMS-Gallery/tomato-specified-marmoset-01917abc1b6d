@@ -2,7 +2,7 @@ import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
-export interface Category { 'id' : bigint, 'name' : string }
+export interface Category { 'id' : bigint, 'icon' : string, 'name' : string }
 export interface Reply {
   'id' : bigint,
   'content' : string,
@@ -23,7 +23,7 @@ export interface Topic {
   'author' : Principal,
 }
 export interface _SERVICE {
-  'createCategory' : ActorMethod<[string], Result>,
+  'createCategory' : ActorMethod<[string, string], Result>,
   'createReply' : ActorMethod<[bigint, string, [] | [bigint]], Result>,
   'createTopic' : ActorMethod<[bigint, string, string], Result>,
   'getCategories' : ActorMethod<[], Array<Category>>,

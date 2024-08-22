@@ -24,11 +24,12 @@ type Reply =
  };
 type Category = 
  record {
+   icon: text;
    id: nat;
    name: text;
  };
 service : {
-  createCategory: (text) -> (Result);
+  createCategory: (text, text) -> (Result);
   createReply: (nat, text, opt nat) -> (Result);
   createTopic: (nat, text, text) -> (Result);
   getCategories: () -> (vec Category) query;

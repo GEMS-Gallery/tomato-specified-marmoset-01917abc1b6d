@@ -5,7 +5,7 @@ import './index.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-const darkTheme = createTheme({
+const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
@@ -15,18 +15,34 @@ const darkTheme = createTheme({
       main: '#FFA500',
     },
     background: {
-      default: '#000000',
-      paper: '#111111',
+      default: '#121212',
+      paper: '#1E1E1E',
     },
   },
   typography: {
-    fontFamily: 'Courier, monospace',
+    fontFamily: '"Roboto Mono", "Courier New", monospace',
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 0,
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 0,
+        },
+      },
+    },
   },
 });
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <App />
     </ThemeProvider>

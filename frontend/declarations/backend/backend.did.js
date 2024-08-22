@@ -1,6 +1,10 @@
 export const idlFactory = ({ IDL }) => {
   const Result = IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text });
-  const Category = IDL.Record({ 'id' : IDL.Nat, 'name' : IDL.Text });
+  const Category = IDL.Record({
+    'id' : IDL.Nat,
+    'icon' : IDL.Text,
+    'name' : IDL.Text,
+  });
   const Time = IDL.Int;
   const Reply = IDL.Record({
     'id' : IDL.Nat,
@@ -19,7 +23,7 @@ export const idlFactory = ({ IDL }) => {
     'author' : IDL.Principal,
   });
   return IDL.Service({
-    'createCategory' : IDL.Func([IDL.Text], [Result], []),
+    'createCategory' : IDL.Func([IDL.Text, IDL.Text], [Result], []),
     'createReply' : IDL.Func(
         [IDL.Nat, IDL.Text, IDL.Opt(IDL.Nat)],
         [Result],
