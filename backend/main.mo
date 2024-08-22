@@ -22,7 +22,7 @@ actor {
     categoryId: Nat;
     title: Text;
     content: Text;
-    author: Principal;
+    author: Text;
     createdAt: Time.Time;
   };
 
@@ -30,7 +30,7 @@ actor {
     id: Nat;
     topicId: Nat;
     content: Text;
-    author: Principal;
+    author: Text;
     parentId: ?Nat;
     createdAt: Time.Time;
   };
@@ -87,7 +87,7 @@ actor {
           categoryId = categoryId;
           title = title;
           content = content;
-          author = msg.caller;
+          author = Principal.toText(msg.caller);
           createdAt = Time.now();
         };
         topics := Array.append(topics, [topic]);
@@ -118,7 +118,7 @@ actor {
           id = nextReplyId;
           topicId = topicId;
           content = content;
-          author = msg.caller;
+          author = Principal.toText(msg.caller);
           parentId = parentId;
           createdAt = Time.now();
         };

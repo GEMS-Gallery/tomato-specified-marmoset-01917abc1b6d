@@ -45,7 +45,7 @@ interface Topic {
   categoryId: bigint;
   title: string;
   content: string;
-  author: Principal;
+  author: string;
   createdAt: bigint;
 }
 
@@ -53,7 +53,7 @@ interface Reply {
   id: bigint;
   topicId: bigint;
   content: string;
-  author: Principal;
+  author: string;
   parentId: bigint | null;
   createdAt: bigint;
 }
@@ -233,7 +233,7 @@ const TopicList: React.FC = () => {
           <ListItem key={Number(topic.id)} component={Link} to={`/topic/${topic.id}`}>
             <ListItemText 
               primary={topic.title} 
-              secondary={`by ${topic.author.toText()} on ${new Date(Number(topic.createdAt) / 1000000).toLocaleString()}`} 
+              secondary={`by ${topic.author} on ${new Date(Number(topic.createdAt) / 1000000).toLocaleString()}`} 
             />
           </ListItem>
         ))}
@@ -329,7 +329,7 @@ const TopicDetail: React.FC = () => {
         {topic.content}
       </Typography>
       <Typography variant="caption">
-        by {topic.author.toText()} on {new Date(Number(topic.createdAt) / 1000000).toLocaleString()}
+        by {topic.author} on {new Date(Number(topic.createdAt) / 1000000).toLocaleString()}
       </Typography>
       <Typography variant="h5" sx={{ mt: 4 }}>
         Replies
@@ -338,7 +338,7 @@ const TopicDetail: React.FC = () => {
         <Paper key={Number(reply.id)} sx={{ mt: 2, p: 2 }} className="nested-reply">
           <Typography variant="body1">{reply.content}</Typography>
           <Typography variant="caption">
-            by {reply.author.toText()} on {new Date(Number(reply.createdAt) / 1000000).toLocaleString()}
+            by {reply.author} on {new Date(Number(reply.createdAt) / 1000000).toLocaleString()}
           </Typography>
         </Paper>
       ))}

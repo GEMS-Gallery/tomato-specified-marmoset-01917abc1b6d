@@ -1,6 +1,6 @@
 type Topic = 
  record {
-   author: principal;
+   author: text;
    categoryId: nat;
    content: text;
    createdAt: Time;
@@ -15,7 +15,7 @@ type Result =
  };
 type Reply = 
  record {
-   author: principal;
+   author: text;
    content: text;
    createdAt: Time;
    id: nat;

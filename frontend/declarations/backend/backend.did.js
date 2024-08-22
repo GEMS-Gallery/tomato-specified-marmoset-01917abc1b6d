@@ -10,7 +10,7 @@ export const idlFactory = ({ IDL }) => {
     'id' : IDL.Nat,
     'content' : IDL.Text,
     'createdAt' : Time,
-    'author' : IDL.Principal,
+    'author' : IDL.Text,
     'parentId' : IDL.Opt(IDL.Nat),
     'topicId' : IDL.Nat,
   });
@@ -20,7 +20,7 @@ export const idlFactory = ({ IDL }) => {
     'title' : IDL.Text,
     'content' : IDL.Text,
     'createdAt' : Time,
-    'author' : IDL.Principal,
+    'author' : IDL.Text,
   });
   return IDL.Service({
     'createCategory' : IDL.Func([IDL.Text, IDL.Text], [Result], []),

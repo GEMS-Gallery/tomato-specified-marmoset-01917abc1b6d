@@ -7,7 +7,7 @@ export interface Reply {
   'id' : bigint,
   'content' : string,
   'createdAt' : Time,
-  'author' : Principal,
+  'author' : string,
   'parentId' : [] | [bigint],
   'topicId' : bigint,
 }
@@ -20,7 +20,7 @@ export interface Topic {
   'title' : string,
   'content' : string,
   'createdAt' : Time,
-  'author' : Principal,
+  'author' : string,
 }
 export interface _SERVICE {
   'createCategory' : ActorMethod<[string, string], Result>,
