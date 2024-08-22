@@ -28,6 +28,7 @@ export interface _SERVICE {
   'createTopic' : ActorMethod<[bigint, string, string], Result>,
   'getCategories' : ActorMethod<[], Array<Category>>,
   'getReplies' : ActorMethod<[bigint], Array<Reply>>,
+  'getTopic' : ActorMethod<[bigint], [] | [Topic]>,
   'getTopics' : ActorMethod<[bigint], Array<Topic>>,
 }
 export declare const idlFactory: IDL.InterfaceFactory;

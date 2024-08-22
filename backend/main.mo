@@ -96,6 +96,10 @@ actor {
     Array.filter<Topic>(topics, func(t) { t.categoryId == categoryId })
   };
 
+  public query func getTopic(topicId: Nat): async ?Topic {
+    findTopic(topicId)
+  };
+
   public shared(msg) func createReply(topicId: Nat, content: Text, parentId: ?Nat): async Result.Result<Nat, Text> {
     switch (findTopic(topicId)) {
       case null { #err("Topic not found") };

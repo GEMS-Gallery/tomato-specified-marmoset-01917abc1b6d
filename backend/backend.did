@@ -33,5 +33,6 @@ service : {
   createTopic: (nat, text, text) -> (Result);
   getCategories: () -> (vec Category) query;
   getReplies: (nat) -> (vec Reply) query;
+  getTopic: (nat) -> (opt Topic) query;
   getTopics: (nat) -> (vec Topic) query;
 }

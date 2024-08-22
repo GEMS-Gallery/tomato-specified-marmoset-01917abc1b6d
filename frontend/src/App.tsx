@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link, useParams, useNavigate } 
 import { AppBar, Toolbar, Typography, Container, Paper, List, ListItem, ListItemText, TextField, Button, CircularProgress } from '@mui/material';
 import { styled } from '@mui/system';
 import { AuthClient } from '@dfinity/auth-client';
+import { Principal } from '@dfinity/principal';
 import { backend } from 'declarations/backend';
 
 const ConsoleInput = styled(TextField)(({ theme }) => ({
@@ -41,7 +42,7 @@ interface Topic {
   categoryId: bigint;
   title: string;
   content: string;
-  author: string;
+  author: Principal;
   createdAt: bigint;
 }
 
@@ -49,7 +50,7 @@ interface Reply {
   id: bigint;
   topicId: bigint;
   content: string;
-  author: string;
+  author: Principal;
   parentId: bigint | null;
   createdAt: bigint;
 }
@@ -195,7 +196,10 @@ const TopicList: React.FC = () => {
       <List>
         {topics.map((topic) => (
           <ListItem key={Number(topic.id)} component={Link} to={`/topic/${topic.id}`}>
-            <ListItemText primary={topic.title} secondary={`by ${topic.author}`} />
+            <ListItemText 
+              primary={topic.title} 
+              secondary={`by ${topic.author.toText()} on ${new Date(Number(topic.createdAt) / 1000000).toLocaleString()}`} 
+            />
           </ListItem>
         ))}
       </List>
@@ -239,9 +243,9 @@ const TopicDetail: React.FC = () => {
 
   const fetchTopicAndReplies = async (topicId: bigint) => {
     try {
-      const topicResult = await backend.getTopics(topicId);
-      if (topicResult.length > 0) {
-        setTopic(topicResult[0]);
+      const topicResult = await backend.getTopic(topicId);
+      if (topicResult) {
+        setTopic(topicResult);
       }
       const repliesResult = await backend.getReplies(topicId);
       setReplies(repliesResult);
@@ -268,21 +272,21 @@ const TopicDetail: React.FC = () => {
     return <CircularProgress />;
   }
 
+  if (!topic) {
+    return <Typography>Topic not found</Typography>;
+  }
+
   return (
     <Paper sx={{ mt: 2, p: 2 }}>
-      {topic && (
-        <>
-          <Typography variant="h4" gutterBottom>
-            {topic.title}
-          </Typography>
-          <Typography variant="body1" paragraph>
-            {topic.content}
-          </Typography>
-          <Typography variant="caption">
-            by {topic.author} on {new Date(Number(topic.createdAt) / 1000000).toLocaleString()}
-          </Typography>
-        </>
-      )}
+      <Typography variant="h4" gutterBottom>
+        {topic.title}
+      </Typography>
+      <Typography variant="body1" paragraph>
+        {topic.content}
+      </Typography>
+      <Typography variant="caption">
+        by {topic.author.toText()} on {new Date(Number(topic.createdAt) / 1000000).toLocaleString()}
+      </Typography>
       <Typography variant="h5" sx={{ mt: 4 }}>
         Replies
       </Typography>
@@ -290,7 +294,7 @@ const TopicDetail: React.FC = () => {
         <Paper key={Number(reply.id)} sx={{ mt: 2, p: 2 }} className="nested-reply">
           <Typography variant="body1">{reply.content}</Typography>
           <Typography variant="caption">
-            by {reply.author} on {new Date(Number(reply.createdAt) / 1000000).toLocaleString()}
+            by {reply.author.toText()} on {new Date(Number(reply.createdAt) / 1000000).toLocaleString()}
           </Typography>
         </Paper>
       ))}

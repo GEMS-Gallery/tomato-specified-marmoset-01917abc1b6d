@@ -28,6 +28,7 @@ export const idlFactory = ({ IDL }) => {
     'createTopic' : IDL.Func([IDL.Nat, IDL.Text, IDL.Text], [Result], []),
     'getCategories' : IDL.Func([], [IDL.Vec(Category)], ['query']),
     'getReplies' : IDL.Func([IDL.Nat], [IDL.Vec(Reply)], ['query']),
+    'getTopic' : IDL.Func([IDL.Nat], [IDL.Opt(Topic)], ['query']),
     'getTopics' : IDL.Func([IDL.Nat], [IDL.Vec(Topic)], ['query']),
   });
 };
