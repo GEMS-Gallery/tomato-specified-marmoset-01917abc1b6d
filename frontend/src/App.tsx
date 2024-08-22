@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link, useParams, useNavigate } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Container, Paper, List, ListItem, ListItemText, TextField, Button, CircularProgress, Grid, Card, CardContent, Icon, Snackbar } from '@mui/material';
+import { BrowserRouter as Router, Route, Routes, Link, useParams, useNavigate, useLocation } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Container, Paper, List, ListItem, ListItemText, TextField, Button, CircularProgress, Grid, Card, CardContent, Icon, Snackbar, Breadcrumbs } from '@mui/material';
 import { styled } from '@mui/system';
 import { AuthClient } from '@dfinity/auth-client';
 import { Principal } from '@dfinity/principal';
@@ -58,6 +58,37 @@ interface Reply {
   createdAt: bigint;
 }
 
+const BreadcrumbsNavigation: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const pathnames = location.pathname.split('/').filter((x) => x);
+
+  return (
+    <Breadcrumbs aria-label="breadcrumb" sx={{ mt: 2, mb: 2 }}>
+      <Link to="/" style={{ color: '#00FF00', textDecoration: 'none' }}>
+        Home
+      </Link>
+      {pathnames.map((name, index) => {
+        const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
+        const isLast = index === pathnames.length - 1;
+        return isLast ? (
+          <Typography key={name} color="#00FF00">
+            {name}
+          </Typography>
+        ) : (
+          <Link
+            key={name}
+            to={routeTo}
+            style={{ color: '#00FF00', textDecoration: 'none' }}
+          >
+            {name}
+          </Link>
+        );
+      })}
+    </Breadcrumbs>
+  );
+};
+
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authClient, setAuthClient] = useState<AuthClient | null>(null);
@@ -110,6 +141,7 @@ const App: React.FC = () => {
         </Toolbar>
       </AppBar>
       <Container>
+        <BreadcrumbsNavigation />
         <Routes>
           <Route path="/" element={<CategoryList />} />
           <Route path="/category/:id" element={<TopicList />} />
