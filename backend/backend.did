@@ -3,11 +3,10 @@ type Topic =
    author: text;
    categoryId: nat;
    content: text;
-   createdAt: Time;
+   createdAt: int;
    id: nat;
    title: text;
  };
-type Time = int;
 type Result = 
  variant {
    err: text;
@@ -17,7 +16,7 @@ type Reply =
  record {
    author: text;
    content: text;
-   createdAt: Time;
+   createdAt: int;
    id: nat;
    parentId: opt nat;
    topicId: nat;

@@ -308,6 +308,11 @@ const TopicDetail: React.FC = () => {
     }
   };
 
+  const formatDate = (timestamp: bigint) => {
+    const date = new Date(Number(timestamp) / 1000000);
+    return isNaN(date.getTime()) ? 'Invalid Date' : date.toLocaleString();
+  };
+
   if (loading) {
     return <CircularProgress />;
   }
@@ -329,7 +334,7 @@ const TopicDetail: React.FC = () => {
         {topic.content}
       </Typography>
       <Typography variant="caption">
-        by {topic.author} on {new Date(Number(topic.createdAt) / 1000000).toLocaleString()}
+        by {topic.author} on {formatDate(topic.createdAt)}
       </Typography>
       <Typography variant="h5" sx={{ mt: 4 }}>
         Replies
@@ -338,7 +343,7 @@ const TopicDetail: React.FC = () => {
         <Paper key={Number(reply.id)} sx={{ mt: 2, p: 2 }} className="nested-reply">
           <Typography variant="body1">{reply.content}</Typography>
           <Typography variant="caption">
-            by {reply.author} on {new Date(Number(reply.createdAt) / 1000000).toLocaleString()}
+            by {reply.author} on {formatDate(reply.createdAt)}
           </Typography>
         </Paper>
       ))}

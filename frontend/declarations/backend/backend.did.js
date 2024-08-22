@@ -5,11 +5,10 @@ export const idlFactory = ({ IDL }) => {
     'icon' : IDL.Text,
     'name' : IDL.Text,
   });
-  const Time = IDL.Int;
   const Reply = IDL.Record({
     'id' : IDL.Nat,
     'content' : IDL.Text,
-    'createdAt' : Time,
+    'createdAt' : IDL.Int,
     'author' : IDL.Text,
     'parentId' : IDL.Opt(IDL.Nat),
     'topicId' : IDL.Nat,
@@ -19,7 +18,7 @@ export const idlFactory = ({ IDL }) => {
     'categoryId' : IDL.Nat,
     'title' : IDL.Text,
     'content' : IDL.Text,
-    'createdAt' : Time,
+    'createdAt' : IDL.Int,
     'author' : IDL.Text,
   });
   return IDL.Service({

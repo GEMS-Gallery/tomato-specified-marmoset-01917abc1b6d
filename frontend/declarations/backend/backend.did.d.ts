@@ -6,20 +6,19 @@ export interface Category { 'id' : bigint, 'icon' : string, 'name' : string }
 export interface Reply {
   'id' : bigint,
   'content' : string,
-  'createdAt' : Time,
+  'createdAt' : bigint,
   'author' : string,
   'parentId' : [] | [bigint],
   'topicId' : bigint,
 }
 export type Result = { 'ok' : bigint } |
   { 'err' : string };
-export type Time = bigint;
 export interface Topic {
   'id' : bigint,
   'categoryId' : bigint,
   'title' : string,
   'content' : string,
-  'createdAt' : Time,
+  'createdAt' : bigint,
   'author' : string,
 }
 export interface _SERVICE {

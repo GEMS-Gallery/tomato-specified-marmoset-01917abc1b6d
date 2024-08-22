@@ -1,4 +1,5 @@
 import Hash "mo:base/Hash";
+import Int "mo:base/Int";
 
 import Text "mo:base/Text";
 import Array "mo:base/Array";
@@ -23,7 +24,7 @@ actor {
     title: Text;
     content: Text;
     author: Text;
-    createdAt: Time.Time;
+    createdAt: Int;
   };
 
   type Reply = {
@@ -32,7 +33,7 @@ actor {
     content: Text;
     author: Text;
     parentId: ?Nat;
-    createdAt: Time.Time;
+    createdAt: Int;
   };
 
   type User = {
