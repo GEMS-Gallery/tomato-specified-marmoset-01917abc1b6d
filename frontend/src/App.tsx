@@ -298,7 +298,7 @@ const TopicDetail: React.FC = () => {
   const createReply = async () => {
     if (id && newReplyContent) {
       try {
-        await backend.createReply(BigInt(id), newReplyContent, null);
+        await backend.createReply(BigInt(id), newReplyContent, []);
         setNewReplyContent('');
         fetchTopicAndReplies(BigInt(id));
       } catch (error) {
