@@ -128,9 +128,10 @@ actor {
         { id = 3; name = "Cryptography" },
         { id = 4; name = "Reverse Engineering" },
         { id = 5; name = "Malware Analysis" },
+        { id = 6; name = "Social Engineering" },
       ];
       categories := defaultCategories;
-      nextCategoryId := 6;
+      nextCategoryId := 7;
     };
   };
 }
