@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, useParams, useNavigate } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Container, Paper, List, ListItem, ListItemText, TextField, Button, CircularProgress, Grid, Card, CardContent, Icon } from '@mui/material';
+import { AppBar, Toolbar, Typography, Container, Paper, List, ListItem, ListItemText, TextField, Button, CircularProgress, Grid, Card, CardContent, Icon, Snackbar } from '@mui/material';
 import { styled } from '@mui/system';
 import { AuthClient } from '@dfinity/auth-client';
 import { Principal } from '@dfinity/principal';
@@ -61,21 +61,30 @@ interface Reply {
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authClient, setAuthClient] = useState<AuthClient | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     AuthClient.create().then(async (client) => {
       const isAuthenticated = await client.isAuthenticated();
       setIsAuthenticated(isAuthenticated);
       setAuthClient(client);
+    }).catch(err => {
+      console.error("Error creating AuthClient:", err);
+      setError("Failed to initialize authentication. Please try again.");
     });
   }, []);
 
   const login = async () => {
     if (authClient) {
-      await authClient.login({
-        identityProvider: 'https://identity.ic0.app/#authorize',
-        onSuccess: () => setIsAuthenticated(true),
-      });
+      try {
+        await authClient.login({
+          identityProvider: 'https://identity.ic0.app/#authorize',
+          onSuccess: () => setIsAuthenticated(true),
+        });
+      } catch (err) {
+        console.error("Login error:", err);
+        setError("Login failed. Please try again.");
+      }
     }
   };
 
@@ -107,6 +116,12 @@ const App: React.FC = () => {
           <Route path="/topic/:id" element={<TopicDetail />} />
         </Routes>
       </Container>
+      <Snackbar
+        open={!!error}
+        autoHideDuration={6000}
+        onClose={() => setError(null)}
+        message={error}
+      />
     </Router>
   );
 };
@@ -114,6 +129,7 @@ const App: React.FC = () => {
 const CategoryList: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchCategories();
@@ -122,16 +138,22 @@ const CategoryList: React.FC = () => {
   const fetchCategories = async () => {
     try {
       const result = await backend.getCategories();
+      console.log("Fetched categories:", result);
       setCategories(result);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching categories:', error);
+      setError('Failed to fetch categories. Please try again.');
       setLoading(false);
     }
   };
 
   if (loading) {
     return <CircularProgress />;
+  }
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
   }
 
   return (
@@ -158,6 +180,7 @@ const TopicList: React.FC = () => {
   const [newTopicTitle, setNewTopicTitle] = useState('');
   const [newTopicContent, setNewTopicContent] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -168,10 +191,12 @@ const TopicList: React.FC = () => {
   const fetchTopics = async (categoryId: bigint) => {
     try {
       const result = await backend.getTopics(categoryId);
+      console.log("Fetched topics:", result);
       setTopics(result);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching topics:', error);
+      setError('Failed to fetch topics. Please try again.');
       setLoading(false);
     }
   };
@@ -185,12 +210,17 @@ const TopicList: React.FC = () => {
         fetchTopics(BigInt(id));
       } catch (error) {
         console.error('Error creating topic:', error);
+        setError('Failed to create topic. Please try again.');
       }
     }
   };
 
   if (loading) {
     return <CircularProgress />;
+  }
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
   }
 
   return (
@@ -239,6 +269,7 @@ const TopicDetail: React.FC = () => {
   const [replies, setReplies] = useState<Reply[]>([]);
   const [newReplyContent, setNewReplyContent] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -249,14 +280,17 @@ const TopicDetail: React.FC = () => {
   const fetchTopicAndReplies = async (topicId: bigint) => {
     try {
       const topicResult = await backend.getTopic(topicId);
+      console.log("Fetched topic:", topicResult);
       if (topicResult) {
         setTopic(topicResult);
       }
       const repliesResult = await backend.getReplies(topicId);
+      console.log("Fetched replies:", repliesResult);
       setReplies(repliesResult);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching topic and replies:', error);
+      setError('Failed to fetch topic and replies. Please try again.');
       setLoading(false);
     }
   };
@@ -269,12 +303,17 @@ const TopicDetail: React.FC = () => {
         fetchTopicAndReplies(BigInt(id));
       } catch (error) {
         console.error('Error creating reply:', error);
+        setError('Failed to create reply. Please try again.');
       }
     }
   };
 
   if (loading) {
     return <CircularProgress />;
+  }
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
   }
 
   if (!topic) {

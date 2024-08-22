@@ -7,6 +7,7 @@ import HashMap "mo:base/HashMap";
 import Principal "mo:base/Principal";
 import Nat "mo:base/Nat";
 import Time "mo:base/Time";
+import Debug "mo:base/Debug";
 
 actor {
   // Types
@@ -68,10 +69,12 @@ actor {
     };
     categories := Array.append(categories, [category]);
     nextCategoryId += 1;
+    Debug.print("Created category: " # debug_show(category));
     #ok(category.id)
   };
 
   public query func getCategories(): async [Category] {
+    Debug.print("Returning categories: " # debug_show(categories));
     categories
   };
 
@@ -89,17 +92,22 @@ actor {
         };
         topics := Array.append(topics, [topic]);
         nextTopicId += 1;
+        Debug.print("Created topic: " # debug_show(topic));
         #ok(topic.id)
       };
     }
   };
 
   public query func getTopics(categoryId: Nat): async [Topic] {
-    Array.filter<Topic>(topics, func(t) { t.categoryId == categoryId })
+    let filteredTopics = Array.filter<Topic>(topics, func(t) { t.categoryId == categoryId });
+    Debug.print("Returning topics for category " # Nat.toText(categoryId) # ": " # debug_show(filteredTopics));
+    filteredTopics
   };
 
   public query func getTopic(topicId: Nat): async ?Topic {
-    findTopic(topicId)
+    let topic = findTopic(topicId);
+    Debug.print("Returning topic " # Nat.toText(topicId) # ": " # debug_show(topic));
+    topic
   };
 
   public shared(msg) func createReply(topicId: Nat, content: Text, parentId: ?Nat): async Result.Result<Nat, Text> {
@@ -116,13 +124,16 @@ actor {
         };
         replies := Array.append(replies, [reply]);
         nextReplyId += 1;
+        Debug.print("Created reply: " # debug_show(reply));
         #ok(reply.id)
       };
     }
   };
 
   public query func getReplies(topicId: Nat): async [Reply] {
-    Array.filter<Reply>(replies, func(r) { r.topicId == topicId })
+    let filteredReplies = Array.filter<Reply>(replies, func(r) { r.topicId == topicId });
+    Debug.print("Returning replies for topic " # Nat.toText(topicId) # ": " # debug_show(filteredReplies));
+    filteredReplies
   };
 
   // Initialize default categories
@@ -138,6 +149,11 @@ actor {
       ];
       categories := defaultCategories;
       nextCategoryId := 7;
+      Debug.print("Initialized default categories: " # debug_show(defaultCategories));
     };
+  };
+
+  system func postupgrade() {
+    Debug.print("Post-upgrade check - Categories: " # debug_show(categories));
   };
 }
