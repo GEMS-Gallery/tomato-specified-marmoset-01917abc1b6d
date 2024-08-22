@@ -1,0 +1,34 @@
+import type { Principal } from '@dfinity/principal';
+import type { ActorMethod } from '@dfinity/agent';
+import type { IDL } from '@dfinity/candid';
+
+export interface Category { 'id' : bigint, 'name' : string }
+export interface Reply {
+  'id' : bigint,
+  'content' : string,
+  'createdAt' : Time,
+  'author' : Principal,
+  'parentId' : [] | [bigint],
+  'topicId' : bigint,
+}
+export type Result = { 'ok' : bigint } |
+  { 'err' : string };
+export type Time = bigint;
+export interface Topic {
+  'id' : bigint,
+  'categoryId' : bigint,
+  'title' : string,
+  'content' : string,
+  'createdAt' : Time,
+  'author' : Principal,
+}
+export interface _SERVICE {
+  'createCategory' : ActorMethod<[string], Result>,
+  'createReply' : ActorMethod<[bigint, string, [] | [bigint]], Result>,
+  'createTopic' : ActorMethod<[bigint, string, string], Result>,
+  'getCategories' : ActorMethod<[], Array<Category>>,
+  'getReplies' : ActorMethod<[bigint], Array<Reply>>,
+  'getTopics' : ActorMethod<[bigint], Array<Topic>>,
+}
+export declare const idlFactory: IDL.InterfaceFactory;
+export declare const init: (args: { IDL: typeof IDL }) => IDL.Type[];

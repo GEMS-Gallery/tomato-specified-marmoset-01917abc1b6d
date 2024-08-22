@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  font-family: 'Courier', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #000000;
+  color: #00FF00;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.console-input {
+  background-color: #000000;
+  color: #00FF00;
+  border: 1px solid #00FF00;
+  padding: 5px;
+  font-family: 'Courier', monospace;
+}
+
+.console-input::before {
+  content: '> ';
+  color: #00FF00;
+}
+
+.nested-reply {
+  margin-left: 20px;
+  border-left: 1px solid #00FF00;
+  padding-left: 10px;
+}

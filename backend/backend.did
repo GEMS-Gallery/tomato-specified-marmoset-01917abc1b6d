@@ -1,0 +1,37 @@
+type Topic = 
+ record {
+   author: principal;
+   categoryId: nat;
+   content: text;
+   createdAt: Time;
+   id: nat;
+   title: text;
+ };
+type Time = int;
+type Result = 
+ variant {
+   err: text;
+   ok: nat;
+ };
+type Reply = 
+ record {
+   author: principal;
+   content: text;
+   createdAt: Time;
+   id: nat;
+   parentId: opt nat;
+   topicId: nat;
+ };
+type Category = 
+ record {
+   id: nat;
+   name: text;
+ };
+service : {
+  createCategory: (text) -> (Result);
+  createReply: (nat, text, opt nat) -> (Result);
+  createTopic: (nat, text, text) -> (Result);
+  getCategories: () -> (vec Category) query;
+  getReplies: (nat) -> (vec Reply) query;
+  getTopics: (nat) -> (vec Topic) query;
+}
